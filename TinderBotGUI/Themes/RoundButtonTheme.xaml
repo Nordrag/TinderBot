@@ -6,13 +6,18 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5" Background="{TemplateBinding Background}">
+                        <Border CornerRadius="5" Background="{TemplateBinding Background}" x:Name="border">
                             <TextBlock Text="{TemplateBinding Property=Content}" 
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
                                        FontSize="16"
                                        Foreground="White"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="green" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

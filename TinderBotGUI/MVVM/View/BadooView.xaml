@@ -12,6 +12,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Label Content="Badoo" FontSize="30" Grid.ColumnSpan="2" Foreground="White" HorizontalAlignment="Center"/>
         <Button Content="Stop" Command="{Binding Badoo.stopCommand}" Width="100" Height="100" Grid.Column="1" Style="{StaticResource RoundButtonTheme}"/>
         <Button Content="Start" Command="{Binding Badoo.startCommand}" Width="100" Height="100" Style="{StaticResource RoundButtonTheme}"/>
     </Grid>

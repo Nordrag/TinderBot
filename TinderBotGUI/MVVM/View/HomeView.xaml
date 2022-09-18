@@ -13,6 +13,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Label Content="Tinder" FontSize="30" Grid.ColumnSpan="2" Foreground="White" HorizontalAlignment="Center"/>
         <Button Content="Start" Width="100" Height="100" Command="{Binding Tinder.startCommand}" Style="{StaticResource RoundButtonTheme}"/>
         <Button Content="Stop" Width="100" Height="100" Grid.Column="1" Command="{Binding Tinder.stopCommand}" Style="{StaticResource RoundButtonTheme}"/>
     </Grid>

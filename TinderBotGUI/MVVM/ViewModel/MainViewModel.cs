@@ -41,6 +41,7 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             Tinder.DestroyDriver();   
             Bumble.DestroyDriver();
+            Badoo.DesroyDriver();
         }
 
         public MainViewModel()

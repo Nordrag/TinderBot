@@ -18,6 +18,18 @@ namespace TinderBotGUI.MVVM.ViewModel
         public RelayCommand updateBanDisplayCommand { get; set; }
 
         int amountOfTinderLikes = 50;
+        int amountOfBadooLikes = 50;
+
+        public int AmountOfBadooLikes
+        {
+            get => amountOfBadooLikes;
+            set
+            {
+                amountOfBadooLikes = value;
+                OnpropertyChanged();
+            }
+        }
+
         public int AmountOfTinderLikes 
         {
             get => amountOfTinderLikes; 
@@ -264,6 +276,7 @@ namespace TinderBotGUI.MVVM.ViewModel
             BanSpirituals = false;
             BanInstaModels = false;
             NothingBanned = true;
+            BanTikTok = false;
         }
 
         public List<string> GetBannedWords()

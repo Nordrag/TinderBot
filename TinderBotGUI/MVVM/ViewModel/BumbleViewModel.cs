@@ -8,8 +8,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 {
     public class BumbleViewModel
     {
-        BotDriver driver = new BotDriver();  
-        bool banConditionFound = false;
+        BotDriver driver = new BotDriver();        
         int likes = 50;
 
         public RelayCommand openSiteCommand { get; set; }
@@ -61,8 +60,7 @@ namespace TinderBotGUI.MVVM.ViewModel
                 RollForLike(likeBtn, dislikeBtn);
                 return;
             }
-
-            banConditionFound = false;
+          
             var tags = driver.GetComponentsByClassName(Bumble.bTagClass);
             var scrollBtn = driver.GetComponentByXPath(Bumble.bScrollBtn);
 
@@ -71,41 +69,21 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             var bio = driver.GetComponentByClassName(Bumble.bBioClass);
             string bioText = bio == null ? "" : bio.Text;
-            List<string> tagText = new List<string>();
-
+            List<string> tagText = new List<string>();          
             tags.ForEach(t => tagText.Add(t.Text));
-            CheckBanned(tagText, bioText);
-
-            var newLikeBtn = driver.GetComponentByClassName(Bumble.bLikeBtn);
-            var newDisLikeBtn = driver.GetComponentByClassName(Bumble.bDislikeBtn);
-
-            if (banConditionFound)
+            var banned = SettingsViewModel.instance.GetBannedWords();
+            foreach (var item in banned)
             {
-                SendDislike(newDisLikeBtn);
-                return;
-            }
-            RollForLike(newLikeBtn, newDisLikeBtn);
-        }
-
-        void Stop()
-        {
-            driver.Stop();
-        }
-
-        void CheckBanned(List<string> tags, string bio)
-        {
-            foreach (var item in SettingsViewModel.instance.instagram)
-            {
-                if (bio.ToLower().Contains(item) || bio.ToLower().Contains('@'))
+                if (bioText.ToLower().Contains(item) || bioText.ToLower().Contains('@') &&SettingsViewModel.instance.BanInstaModels)
                 {
-                    banConditionFound = true;
+                    SendDislike(dislikeBtn);
                     return;
                 }
             }
 
             var bans = SettingsViewModel.instance.GetBannedWords();
 
-            foreach (var tag in tags)
+            foreach (var tag in tagText)
             {
                 foreach (var ban in bans)
                 {
@@ -113,13 +91,23 @@ namespace TinderBotGUI.MVVM.ViewModel
 
                     if (found)
                     {
-                        banConditionFound = true;
+                        SendDislike(dislikeBtn);
                         return;
                     }
                 }
             }
+
+            var newLikeBtn = driver.GetComponentByClassName(Bumble.bLikeBtn);
+            var newDisLikeBtn = driver.GetComponentByClassName(Bumble.bDislikeBtn);
+          
+            RollForLike(newLikeBtn, newDisLikeBtn);
         }
 
+        void Stop()
+        {
+            driver.Stop();
+        }
+    
         void SendDislike(IWebElement btn)
         {
             if (btn != null)

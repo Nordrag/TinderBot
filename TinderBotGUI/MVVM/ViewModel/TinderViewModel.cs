@@ -9,8 +9,7 @@ namespace TinderBotGUI.MVVM.ViewModel
     public class TinderViewModel
     {
         BotDriver driver = new BotDriver();
-            
-        bool banConditionFound;
+                 
         bool homeScreenPopUp, boostPopUp;
 
         public RelayCommand openSiteCommand { get; set; }
@@ -71,18 +70,29 @@ namespace TinderBotGUI.MVVM.ViewModel
                 }
                 else
                 {
-                    var dislikeBtn = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
-                    SendDisliked(dislikeBtn);
+                    var dLike = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
+                    SendDisliked(dLike);
                 }
                 return;
             }
-
-
-
-            banConditionFound = false;
+         
             var infoBtn = driver.GetComponentByXPath(Tinder.tInfoButton);
             var onlineIcon = driver.GetComponentByXPath(Tinder.tOnlineButtonXPath);
             string online = onlineIcon == null ? "" : onlineIcon.Text;
+
+            if (SettingsViewModel.instance.RecentlyOnline)
+            {
+                string compare = SettingsViewModel.instance.IsEnglish ? "Recently active" : "Nemrég aktív";
+                bool bOnline = online == compare;
+                if (!bOnline)
+                {
+                    var dLike = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
+                    SendDisliked(dLike);
+                    return;
+                }
+
+
+            }        
 
             ClickInfoBtn(infoBtn);
             var tags = driver.GetComponentsByClassName(Tinder.tTagsCSS);
@@ -90,22 +100,29 @@ namespace TinderBotGUI.MVVM.ViewModel
             string bioText = bio == null ? "" : bio.Text;
 
             List<string> tagStrings = new List<string>();
+            tagStrings.Add(bioText);
             tags.ForEach(tag => tagStrings.Add(tag.Text));
 
-            CheckBanConditions(bioText, tagStrings, online);
+            var banned = SettingsViewModel.instance.GetBannedWords();
+            foreach (var item in banned)
+            {
+                foreach (var tag in tagStrings)
+                {
+                    if (tag.ToLower().Contains(item) || tag.Contains('@') && SettingsViewModel.instance.BanInstaModels)
+                    {
+                        CloseBio();
+                        var dLike = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
+                        SendDisliked(dLike);
+                        return;
+                    }
+                }             
+            }
+           
             CloseBio();
 
-            if (banConditionFound)
-            {
-                var dislikeBtn = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
-                SendDisliked(dislikeBtn);
-            }
-            else
-            {
-                var dislikeBtn = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
-                var newLikeBtn = driver.GetComponentByClassName(Tinder.tLikeButtonCSS);
-                RollForLike(newLikeBtn, dislikeBtn);
-            }
+            var dislikeBtn = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
+            var newLikeBtn = driver.GetComponentByClassName(Tinder.tLikeButtonCSS);
+            RollForLike(newLikeBtn, dislikeBtn);
             CheckPopUp();
         }
 
@@ -175,6 +192,7 @@ namespace TinderBotGUI.MVVM.ViewModel
             if (res != null)
             {
                 driver.ClickElement(res);
+                Thread.Sleep(500);
             }
         }
 
@@ -188,62 +206,8 @@ namespace TinderBotGUI.MVVM.ViewModel
             {
                 SendDisliked(dislikeBtn);
             }
-        }
-
-        void CheckBanConditions(string bio, ICollection<string> tags, string online)
-        {
-            
-           
-                if (SettingsViewModel.instance.RecentlyOnline)
-                {
-                    string compare = SettingsViewModel.instance.IsEnglish ? "Recently active" : "Nemrég aktív";
-                    bool bOnline = online == compare;                  
-                    if (!bOnline)
-                    {
-                        banConditionFound = true;                   
-                        return;
-                    }
-                
-
-                }
-                                    
-                foreach (var item in SettingsViewModel.instance.instagram)
-                {
-                    if (bio.ToLower().Contains(item) || bio.Contains('@'))
-                    {
-                        banConditionFound = true;
-                        return;
-                    }
-                }
-            
-
-            if (tags.Count > 0)
-            {
-                ContainsBanned(tags);
-            }
-           
-        }
-
-        void ContainsBanned(ICollection<string> tags)
-        {
-            var bans = SettingsViewModel.instance.GetBannedWords();
-            
-
-            foreach (var item in tags)
-            {
-                foreach (var tag in bans)
-                {
-                    bool found = item.ToLower().Contains(tag);
-
-                    if (found)
-                    {
-                        banConditionFound = true;                      
-                        return;
-                    }
-                }
-            }          
-        }
-
+        }       
+       
         void CheckForAddHomeScreenPopUp()
         {
             if (!homeScreenPopUp)

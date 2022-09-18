@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 using TinderBotGUI.Core;
 
 namespace TinderBotGUI.MVVM.ViewModel
-{
-    //https://www.youtube.com/watch?v=5oz2zJF_jM4
+{   
     public class BadooViewModel
     {
-        bool banConditionFound;
-
+       
         BotDriver driver = new BotDriver();
         public RelayCommand startCommand { get; set; }
         public RelayCommand stopCommand { get; set; }
@@ -28,9 +26,9 @@ namespace TinderBotGUI.MVVM.ViewModel
             }
 
 
-            if (SettingsViewModel.instance.AmountOfTinderLikes <= 0)
+            if (SettingsViewModel.instance.AmountOfBadooLikes <= 0)
             {
-                SettingsViewModel.instance.AmountOfTinderLikes = 50;
+                SettingsViewModel.instance.AmountOfBadooLikes = 50;
             }
 
             driver.Start(() => Work());
@@ -43,10 +41,10 @@ namespace TinderBotGUI.MVVM.ViewModel
 
         void Work()
         {
-            banConditionFound = false;
+            CheckNotifyPopUp();         
             var likeBtn = driver.GetComponentByClassName(Badoo.likeBtnCSS);
             var disLikeBtn = driver.GetComponentByClassName(Badoo.disLikeBtnCSS);
-            var bio = driver.GetComponentByClassName(Badoo.bioCSS);
+           
 
             if (SettingsViewModel.instance.NothingBanned)
             {
@@ -54,32 +52,38 @@ namespace TinderBotGUI.MVVM.ViewModel
                 return;
             }
 
-
-            if (bio != null)
+            var online = driver.GetComponentByClassName(Badoo.onlineCSS);
+            if (online == null)
             {
-                CheckBio(bio.Text, disLikeBtn);
+                Dislike(disLikeBtn);
+                return;
             }
 
-            if (!banConditionFound)
+            var bioElement = driver.GetComponentByClassName(Badoo.bioCSS);
+            string bio;
+            if (bioElement != null)
             {
-                RollForLike(likeBtn, disLikeBtn);
+                bio = bioElement.Text;
             }
-        }
+            else
+            {
+                return;
+            }
 
-        void CheckBio(string bio, IWebElement dislike)
-        {
             var banList = SettingsViewModel.instance.GetBannedWords();
 
             foreach (var item in banList)
             {
-                if (bio.ToLower().Contains(item.ToLower()))
+                if (bio.ToLower().Contains(item.ToLower()) || bio.Contains('@') && SettingsViewModel.instance.BanInstaModels)
                 {
-                    banConditionFound = true;
-                    Dislike(dislike);
+                    Dislike(disLikeBtn);
                     return;
                 }
             }
+            RollForLike(likeBtn, disLikeBtn);
         }
+
+        
 
         void RollForLike(IWebElement likeBtn, IWebElement dislikeBtn)
         {
@@ -100,12 +104,17 @@ namespace TinderBotGUI.MVVM.ViewModel
             if (likeBtn != null)
             {
                 driver.ClickElement(likeBtn);
-            }
-            else
-            {
-                driver.Stop();
-            }
-            Thread.Sleep(1000);
+                SettingsViewModel.instance.AmountOfBadooLikes--;              
+                if (SettingsViewModel.instance.AmountOfBadooLikes <= 0 && !SettingsViewModel.instance.InfiniteLikes)
+                {
+                    driver.Stop();
+                    return;
+                }
+            }          
+            Thread.Sleep(1500);
+
+            CheckForOutOfLikes();
+            CheckForMatch();
         }
 
         void Dislike(IWebElement disLike)
@@ -113,12 +122,44 @@ namespace TinderBotGUI.MVVM.ViewModel
             if (disLike != null)
             {
                 driver.ClickElement(disLike);
+            }          
+            Thread.Sleep(1500);
+        }
+
+        void CheckForMatch()
+        {
+            var match = driver.GetComponentByClassName(Badoo.matchCss);
+
+            if (match != null)
+            {
+                driver.ClickElement(match);
             }
-            else
+        }
+
+        void CheckForOutOfLikes()
+        {
+            var outOfLikes = driver.GetComponentByClassName(Badoo.outOfLikesCss);
+
+            if (outOfLikes != null)
             {
                 driver.Stop();
             }
-            Thread.Sleep(1000);
+        }
+
+        void CheckNotifyPopUp()
+        {
+            var pop = driver.GetComponentByClassName(Badoo.notifyPopUpCss);
+
+            if (pop != null)
+            {
+                driver.ClickElement(pop);
+                Thread.Sleep(1000);
+            }
+        }     
+
+        internal void DesroyDriver()
+        {
+            driver.Quit();
         }
 
         public BadooViewModel()

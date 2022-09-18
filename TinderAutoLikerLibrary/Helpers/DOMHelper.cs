@@ -43,4 +43,9 @@ public class Badoo
     public static readonly string disLikeBtnCSS = "js-profile-header-vote-no";
     public static readonly string bioCSS = "profile-section__txt-line";
     public static readonly string onlineCSS = "online-status--online";
+    public static readonly string matchXPath = "/html/body/aside/section/div[1]/div/div[2]";
+    public static readonly string matchCss = "ovl__close";
+    public static readonly string notifyPopUpCss = "js-chrome-pushes-deny";
+    public static readonly string outOfLikesCss = "js-ovl-close";
+    public static readonly string outOfLikesXPath = "/html/body/aside/section/div[1]/div/div[2]/i/svg/use";
 }
