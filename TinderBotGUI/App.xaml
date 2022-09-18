@@ -1,0 +1,31 @@
+﻿<Application x:Class="TinderBotGUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TinderBotGUI"
+             xmlns:viewModel="clr-namespace:TinderBotGUI.MVVM.ViewModel"
+             xmlns:view="clr-namespace:TinderBotGUI.MVVM.View"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/MenuBtnTheme.xaml" x:Name="MenuBtnTheme"/>
+                <ResourceDictionary Source="/Themes/RoundButtonTheme.xaml" x:Name="RoundButtonTheme"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+                <view:SettingsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:TinderViewModel}">
+                <view:HomeView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:BumbleViewModel}">
+                <view:BumbleView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:BadooViewModel}">
+                <view:BadooView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:AboutViewModel}">
+                <view:AboutView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

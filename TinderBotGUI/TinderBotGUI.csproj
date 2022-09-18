@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Bg\bumble.png" />
+    <None Remove="Bg\Destructoid_logo2.png" />
+    <None Remove="Bg\Tinder-Logo-PNG9.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Bg\bumble.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bg\Destructoid_logo2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bg\Tinder-Logo-PNG9.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MVVM\Model\" />
+    <Folder Include="Save\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TinderAutoLikerLibrary\TinderAutoLikerLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Bg\futurama.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
