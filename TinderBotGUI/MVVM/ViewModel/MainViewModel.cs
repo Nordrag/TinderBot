@@ -9,10 +9,7 @@ using TinderBotGUI.Core;
 namespace TinderBotGUI.MVVM.ViewModel
 {
     public class MainViewModel : ObservableObject
-    {
-
-        public int likeCount;
-
+    {       
         public RelayCommand TinderViewCommand { get; set; }
         public RelayCommand BumbleViewCommand { get; set; }
         public RelayCommand BadooViewCommand { get; set; }
@@ -50,16 +47,14 @@ namespace TinderBotGUI.MVVM.ViewModel
             Tinder = new TinderViewModel();
             Bumble = new BumbleViewModel();
             Badoo = new BadooViewModel();
-            About = new AboutViewModel();
+            About = new AboutViewModel(Settings.SavedData.LikesSentOnTinder, Settings.SavedData.LikesSentOnBadoo, Settings.SavedData.MatchesOnTinder, Settings.SavedData.MatchesOnBadoo);
             currentView = Tinder;
 
             TinderViewCommand = new RelayCommand(e => { CurrentView = Tinder;}, f => true);
             BumbleViewCommand = new RelayCommand(e => { CurrentView = Bumble;}, f => true);
             BadooViewCommand = new RelayCommand(e => { CurrentView = Badoo;}, f => true);
             SettingsViewCommand = new RelayCommand(e => { CurrentView = Settings; }, f => true);
-            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);
-
-            likeCount = Settings.AmountOfTinderLikes;
+            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);           
         }
      
     }

@@ -130,6 +130,7 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             if (likeBtn != null)
             {
+                AboutViewModel.Instance.LikesSentOnTinder++;
                 driver.ClickElement(likeBtn);
                 Thread.Sleep(1500);
 
@@ -259,6 +260,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             if (matchBox != null)
             {
+                AboutViewModel.Instance.MatchesOnTinder++;
                 driver.ClickElement(matchBox);
                 Thread.Sleep(1000);
             }

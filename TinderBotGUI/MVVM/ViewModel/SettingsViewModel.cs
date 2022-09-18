@@ -15,6 +15,8 @@ namespace TinderBotGUI.MVVM.ViewModel
         Serializer serializer = new Serializer();
         SavedSettings? save;
 
+        public SavedSettings SavedData => save;
+
         public RelayCommand updateBanDisplayCommand { get; set; }
 
         int amountOfTinderLikes = 50;
@@ -267,6 +269,15 @@ namespace TinderBotGUI.MVVM.ViewModel
             serializer.Serialize<SavedSettings>(save); 
         }
 
+        public void SaveStats()
+        {
+            save.LikesSentOnTinder = AboutViewModel.Instance.LikesSentOnTinder;
+            save.LikesSentOnBadoo = AboutViewModel.Instance.LikesSentOnBadoo;
+            save.MatchesOnTinder = AboutViewModel.Instance.MatchesOnTinder;
+            save.MatchesOnBadoo = AboutViewModel.Instance.MatchesOnBadoo;
+            serializer.Serialize<SavedSettings>(save);
+        }
+
         void Clear()
         {
             RecentlyOnline = false;
@@ -286,7 +297,7 @@ namespace TinderBotGUI.MVVM.ViewModel
     }
 
     [System.Serializable]
-    internal class SavedSettings
+    public class SavedSettings
     {
         public bool HasPremium;
         public bool IsEnglish;
@@ -300,6 +311,11 @@ namespace TinderBotGUI.MVVM.ViewModel
         public bool BanInstaModels;
         public bool BanTikToks;
         public bool NothingBanned;
+
+        public int LikesSentOnTinder;
+        public int LikesSentOnBadoo;
+        public int MatchesOnTinder;
+        public int MatchesOnBadoo;
 
         public SavedSettings(int chance, bool online, bool infinite, bool feminist, bool lgbtq, bool dog, bool spiritual, bool models, bool tiktok , bool nothing, bool hasPremium, bool isEnglish)
         {

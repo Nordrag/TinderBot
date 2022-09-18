@@ -104,7 +104,8 @@ namespace TinderBotGUI.MVVM.ViewModel
             if (likeBtn != null)
             {
                 driver.ClickElement(likeBtn);
-                SettingsViewModel.instance.AmountOfBadooLikes--;              
+                SettingsViewModel.instance.AmountOfBadooLikes--;
+                AboutViewModel.Instance.LikesSentOnBadoo++;
                 if (SettingsViewModel.instance.AmountOfBadooLikes <= 0 && !SettingsViewModel.instance.InfiniteLikes)
                 {
                     driver.Stop();
@@ -132,6 +133,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             if (match != null)
             {
+                AboutViewModel.Instance.MatchesOnBadoo++;
                 driver.ClickElement(match);
             }
         }

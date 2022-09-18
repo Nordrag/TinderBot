@@ -32,6 +32,7 @@ namespace TinderBotGUI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             viewModel.DestroyDriver();
+            SettingsViewModel.instance.SaveStats();
             Application.Current.Shutdown();
         }
     }
