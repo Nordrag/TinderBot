@@ -67,7 +67,7 @@ namespace TinderBotGUI.MVVM.ViewModel
             }
             else
             {
-                return;
+                bio = "";
             }
 
             var banList = SettingsViewModel.instance.GetBannedWords();

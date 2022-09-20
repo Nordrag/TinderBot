@@ -52,7 +52,7 @@
                              Foreground="White"
                              FontSize="14"                                  Command="{Binding SettingsViewCommand}"
                              Style="{StaticResource MenuButtonTheme}"/>
-                <RadioButton Content="About"                          Height="50"
+                <RadioButton Content="Stats"                          Height="50"
                              Foreground="White"
                              FontSize="14"                           
                              Style="{StaticResource MenuButtonTheme}"

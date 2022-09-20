@@ -54,7 +54,8 @@ namespace TinderBotGUI.MVVM.ViewModel
             BumbleViewCommand = new RelayCommand(e => { CurrentView = Bumble;}, f => true);
             BadooViewCommand = new RelayCommand(e => { CurrentView = Badoo;}, f => true);
             SettingsViewCommand = new RelayCommand(e => { CurrentView = Settings; }, f => true);
-            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);           
+            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);     
+                       
         }
      
     }
