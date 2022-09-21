@@ -26,9 +26,9 @@ namespace TinderBotGUI.MVVM.ViewModel
             }
 
 
-            if (SettingsViewModel.instance.AmountOfBadooLikes <= 0)
+            if (MainViewModel.Instance.Settings.AmountOfBadooLikes <= 0)
             {
-                SettingsViewModel.instance.AmountOfBadooLikes = 50;
+                MainViewModel.Instance.Settings.AmountOfBadooLikes = 50;
             }
 
             driver.Start(() => Work());
@@ -46,7 +46,7 @@ namespace TinderBotGUI.MVVM.ViewModel
             var disLikeBtn = driver.GetComponentByClassName(Badoo.disLikeBtnCSS);
            
 
-            if (SettingsViewModel.instance.NothingBanned)
+            if (MainViewModel.Instance.Settings.NothingBanned)
             {
                 RollForLike(likeBtn, disLikeBtn);
                 return;
@@ -70,11 +70,11 @@ namespace TinderBotGUI.MVVM.ViewModel
                 return;
             }
 
-            var banList = SettingsViewModel.instance.GetBannedWords();
+            var banList = MainViewModel.Instance.Settings.GetBannedWords();
 
             foreach (var item in banList)
             {
-                if (bio.ToLower().Contains(item.ToLower()) || bio.Contains('@') && SettingsViewModel.instance.BanInstaModels)
+                if (bio.ToLower().Contains(item.ToLower()) || bio.Contains('@') && MainViewModel.Instance.Settings.BanInstaModels)
                 {
                     Dislike(disLikeBtn);
                     return;
@@ -89,7 +89,7 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             var roll = Random.Shared.Next(0, 101);
 
-            if (roll <= SettingsViewModel.instance.LikeChance)
+            if (roll <= MainViewModel.Instance.Settings.LikeChance)
             {
                 Like(likeBtn);
             }
@@ -104,9 +104,9 @@ namespace TinderBotGUI.MVVM.ViewModel
             if (likeBtn != null)
             {
                 driver.ClickElement(likeBtn);
-                SettingsViewModel.instance.AmountOfBadooLikes--;
-                AboutViewModel.Instance.LikesSentOnBadoo++;
-                if (SettingsViewModel.instance.AmountOfBadooLikes <= 0 && !SettingsViewModel.instance.InfiniteLikes)
+                MainViewModel.Instance.Settings.AmountOfBadooLikes--;
+                MainViewModel.Instance.About.LikesSentOnBadoo++;
+                if (MainViewModel.Instance.Settings.AmountOfBadooLikes <= 0 && !MainViewModel.Instance.Settings.InfiniteLikes)
                 {
                     driver.Stop();
                     return;
@@ -133,7 +133,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             if (match != null)
             {
-                AboutViewModel.Instance.MatchesOnBadoo++;
+                MainViewModel.Instance.About.MatchesOnBadoo++;
                 driver.ClickElement(match);
             }
         }

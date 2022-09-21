@@ -19,7 +19,7 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             driver.CreateDriver();
             driver.OpenSite(BotDriver.bumbleUrl);
-            likes = SettingsViewModel.instance.AmountOfTinderLikes;
+            likes = MainViewModel.Instance.Settings.AmountOfTinderLikes;
         }
 
         public void DestroyDriver()
@@ -35,7 +35,7 @@ namespace TinderBotGUI.MVVM.ViewModel
                 return;
             }
 
-            likes = likes <= 0 ? SettingsViewModel.instance.AmountOfTinderLikes : likes;
+            likes = likes <= 0 ? MainViewModel.Instance.Settings.AmountOfTinderLikes : likes;
 
             driver.Start(() => Work());
         }   
@@ -55,7 +55,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             var likeBtn = driver.GetComponentByClassName(Bumble.bLikeBtn);
             var dislikeBtn = driver.GetComponentByClassName(Bumble.bDislikeBtn);
-            if (SettingsViewModel.instance.NothingBanned)
+            if (MainViewModel.Instance.Settings.NothingBanned)
             {
                 RollForLike(likeBtn, dislikeBtn);
                 return;
@@ -71,17 +71,17 @@ namespace TinderBotGUI.MVVM.ViewModel
             string bioText = bio == null ? "" : bio.Text;
             List<string> tagText = new List<string>();          
             tags.ForEach(t => tagText.Add(t.Text));
-            var banned = SettingsViewModel.instance.GetBannedWords();
+            var banned = MainViewModel.Instance.Settings.GetBannedWords();
             foreach (var item in banned)
             {
-                if (bioText.ToLower().Contains(item) || bioText.ToLower().Contains('@') &&SettingsViewModel.instance.BanInstaModels)
+                if (bioText.ToLower().Contains(item) || bioText.ToLower().Contains('@') && MainViewModel.Instance.Settings.BanInstaModels)
                 {
                     SendDislike(dislikeBtn);
                     return;
                 }
             }
 
-            var bans = SettingsViewModel.instance.GetBannedWords();
+            var bans = MainViewModel.Instance.Settings.GetBannedWords();
 
             foreach (var tag in tagText)
             {
@@ -136,7 +136,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
         void RollForLike(IWebElement likeBtn, IWebElement dislikeBtn)
         {
-            if (Random.Shared.Next(0, 101) <= SettingsViewModel.instance.LikeChance)
+            if (Random.Shared.Next(0, 101) <= MainViewModel.Instance.Settings.LikeChance)
             {
                 SendLike(likeBtn);
             }

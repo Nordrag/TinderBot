@@ -9,8 +9,7 @@ using TinderAutoLikerLibrary.Helpers;
 namespace TinderBotGUI.MVVM.ViewModel
 {
     public class SettingsViewModel : ObservableObject
-    {
-        public static SettingsViewModel instance;
+    {       
 
         Serializer serializer = new Serializer();
         SavedSettings? save;
@@ -229,9 +228,7 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             saveSettingsCommand = new RelayCommand(e => Save(), f => true);
             clearBansCommand = new RelayCommand(e => Clear(), f => true);
-            updateBanDisplayCommand = new RelayCommand(e => SetBanned(), f => true);
-
-            instance = this;
+            updateBanDisplayCommand = new RelayCommand(e => SetBanned(), f => true);          
 
             try
             {
@@ -271,10 +268,10 @@ namespace TinderBotGUI.MVVM.ViewModel
 
         public void SaveStats()
         {
-            save.LikesSentOnTinder = AboutViewModel.Instance.LikesSentOnTinder;
-            save.LikesSentOnBadoo = AboutViewModel.Instance.LikesSentOnBadoo;
-            save.MatchesOnTinder = AboutViewModel.Instance.MatchesOnTinder;
-            save.MatchesOnBadoo = AboutViewModel.Instance.MatchesOnBadoo;
+            save.LikesSentOnTinder = MainViewModel.Instance.About.LikesSentOnTinder;
+            save.LikesSentOnBadoo = MainViewModel.Instance.About.LikesSentOnBadoo;
+            save.MatchesOnTinder = MainViewModel.Instance.About.MatchesOnTinder;
+            save.MatchesOnBadoo = MainViewModel.Instance.About.MatchesOnBadoo;
             serializer.Serialize<SavedSettings>(save);
         }
 

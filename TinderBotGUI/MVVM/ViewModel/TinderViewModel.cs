@@ -42,9 +42,9 @@ namespace TinderBotGUI.MVVM.ViewModel
                 return;
             }
 
-            if (SettingsViewModel.instance.AmountOfTinderLikes <=0)
+            if (MainViewModel.Instance.Settings.AmountOfTinderLikes <=0)
             {
-                SettingsViewModel.instance.AmountOfTinderLikes = 50;
+                MainViewModel.Instance.Settings.AmountOfTinderLikes = 50;
             }
 
             driver.Start(() => Work());          
@@ -62,9 +62,9 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             var likeBtn = driver.GetComponentByClassName(Tinder.tLikeButtonCSS);
 
-            if (SettingsViewModel.instance.NothingBanned)
+            if (MainViewModel.Instance.Settings.NothingBanned)
             {
-                if (Random.Shared.Next(0, 101) <= SettingsViewModel.instance.LikeChance)
+                if (Random.Shared.Next(0, 101) <= MainViewModel.Instance.Settings.LikeChance)
                 {
                     SendLike(likeBtn);
                 }
@@ -80,9 +80,9 @@ namespace TinderBotGUI.MVVM.ViewModel
             var onlineIcon = driver.GetComponentByXPath(Tinder.tOnlineButtonXPath);
             string online = onlineIcon == null ? "" : onlineIcon.Text;
 
-            if (SettingsViewModel.instance.RecentlyOnline)
+            if (MainViewModel.Instance.Settings.RecentlyOnline)
             {
-                string compare = SettingsViewModel.instance.IsEnglish ? "Recently active" : "Nemrég aktív";
+                string compare = MainViewModel.Instance.Settings.IsEnglish ? "Recently active" : "Nemrég aktív";
                 bool bOnline = online == compare;
                 if (!bOnline)
                 {
@@ -103,12 +103,12 @@ namespace TinderBotGUI.MVVM.ViewModel
             tagStrings.Add(bioText);
             tags.ForEach(tag => tagStrings.Add(tag.Text));
 
-            var banned = SettingsViewModel.instance.GetBannedWords();
+            var banned = MainViewModel.Instance.Settings.GetBannedWords();
             foreach (var item in banned)
             {
                 foreach (var tag in tagStrings)
                 {
-                    if (tag.ToLower().Contains(item) || tag.Contains('@') && SettingsViewModel.instance.BanInstaModels)
+                    if (tag.ToLower().Contains(item) || tag.Contains('@') && MainViewModel.Instance.Settings.BanInstaModels)
                     {
                         CloseBio();
                         var dLike = driver.GetComponentByClassName(Tinder.tDislikeButtonCSS);
@@ -130,15 +130,15 @@ namespace TinderBotGUI.MVVM.ViewModel
         {
             if (likeBtn != null)
             {
-                AboutViewModel.Instance.LikesSentOnTinder++;
+                MainViewModel.Instance.About.LikesSentOnTinder++;
                 driver.ClickElement(likeBtn);
                 Thread.Sleep(1500);
 
-                if (!SettingsViewModel.instance.InfiniteLikes)
+                if (!MainViewModel.Instance.Settings.InfiniteLikes)
                 {
-                    SettingsViewModel.instance.AmountOfTinderLikes--;
+                    MainViewModel.Instance.Settings.AmountOfTinderLikes--;
 
-                    if (SettingsViewModel.instance.AmountOfTinderLikes <= 0)
+                    if (MainViewModel.Instance.Settings.AmountOfTinderLikes <= 0)
                     {
                         driver.Stop();
                     }
@@ -199,7 +199,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
         void RollForLike(IWebElement likeBtn, IWebElement dislikeBtn)
         {
-            if (Random.Shared.Next(0, 101) <= SettingsViewModel.instance.LikeChance)
+            if (Random.Shared.Next(0, 101) <= MainViewModel.Instance.Settings.LikeChance)
             {
                 SendLike(likeBtn);              
             }
@@ -243,7 +243,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
         void CheckForOutOfLikes()
         {
-            if (!SettingsViewModel.instance.HasPremium)
+            if (!MainViewModel.Instance.Settings.HasPremium)
             {
                 var outOflikes = driver.GetComponentByXPath(Tinder.tOutOfLikesBox);
 
@@ -260,7 +260,7 @@ namespace TinderBotGUI.MVVM.ViewModel
 
             if (matchBox != null)
             {
-                AboutViewModel.Instance.MatchesOnTinder++;
+                MainViewModel.Instance.About.MatchesOnTinder++;
                 driver.ClickElement(matchBox);
                 Thread.Sleep(1000);
             }

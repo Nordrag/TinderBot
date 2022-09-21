@@ -8,8 +8,7 @@ using TinderBotGUI.Core;
 namespace TinderBotGUI.MVVM.ViewModel
 {
     public class AboutViewModel : ObservableObject
-    {
-        public static AboutViewModel Instance;
+    {      
 
         int likesSentOnTinder;
         public int LikesSentOnTinder 
@@ -93,8 +92,7 @@ namespace TinderBotGUI.MVVM.ViewModel
             LikesSentOnTinder= tLikes;
             LikesSentOnBadoo= bLikes;
             MatchesOnTinder = tMatches;
-            MatchesOnBadoo = bMatches;
-            Instance = this;
+            MatchesOnBadoo = bMatches;          
         }
     }
 }

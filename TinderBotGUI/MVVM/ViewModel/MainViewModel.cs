@@ -9,7 +9,9 @@ using TinderBotGUI.Core;
 namespace TinderBotGUI.MVVM.ViewModel
 {
     public class MainViewModel : ObservableObject
-    {       
+    {
+        public static MainViewModel Instance { get; private set; }
+
         public RelayCommand TinderViewCommand { get; set; }
         public RelayCommand BumbleViewCommand { get; set; }
         public RelayCommand BadooViewCommand { get; set; }
@@ -54,7 +56,9 @@ namespace TinderBotGUI.MVVM.ViewModel
             BumbleViewCommand = new RelayCommand(e => { CurrentView = Bumble;}, f => true);
             BadooViewCommand = new RelayCommand(e => { CurrentView = Badoo;}, f => true);
             SettingsViewCommand = new RelayCommand(e => { CurrentView = Settings; }, f => true);
-            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);           
+            AboutViewCommand = new RelayCommand(e => { CurrentView = About; }, f => true);
+
+            Instance = this;
         }
      
     }
