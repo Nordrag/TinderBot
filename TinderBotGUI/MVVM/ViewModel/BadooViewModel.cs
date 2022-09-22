@@ -60,15 +60,12 @@ namespace TinderBotGUI.MVVM.ViewModel
             }
 
             var bioElement = driver.GetComponentByClassName(Badoo.bioCSS);
-            string bio;
+            string bio ="";
             if (bioElement != null)
             {
                 bio = bioElement.Text;
             }
-            else
-            {
-                return;
-            }
+           
 
             var banList = MainViewModel.Instance.Settings.GetBannedWords();
 
